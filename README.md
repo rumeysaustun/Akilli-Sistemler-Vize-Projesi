@@ -1,0 +1,1 @@
+# Akilli-Sistemler-Vize-Projesi
