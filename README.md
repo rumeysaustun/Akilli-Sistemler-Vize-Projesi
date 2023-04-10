@@ -1,6 +1,11 @@
 # Akıllı Sistemler Vize Projesi
 ---
-Bu projede Akıllı Sistemler dersi kapsamında bir hastalık tahmin sistemi geliştirilmiştir. Bu sistemde belirtileri girdi alan uygulamamız en yüksek ihtimalle kullanıcının hangi hastalığının olduğunu tahmin etmektedir. Hastalıklar şöyle sıralanmaktadır:
+Bu projede Akıllı Sistemler dersi kapsamında bir hastalık tahmin sistemi geliştirilmiştir. Bu sistemde belirtileri girdi alan uygulamamız en yüksek ihtimalle kullanıcının hangi hastalığının olduğunu tahmin etmektedir. 
+
+
+
+## Hastalıklar 
+---
 
 - Grip
 - Soğuk Algınlığı
@@ -8,45 +13,22 @@ Bu projede Akıllı Sistemler dersi kapsamında bir hastalık tahmin sistemi gel
 - Korona
 - Domuz Gribi
 
+## Belirtiler
+--- 
 Öncelikle belirlenen bu hastalıkların belirtileri sıralanmış ve prolog kodunda tanımlanmıştır.
 
-- Grip hastalığının belirtileri:
-  - Ateş
-  - Öksürük
-  - Boğaz ağrısı
-  - Burun akıntısı
-  - Vücut ağrıları
-  - Baş ağrısı
-  - Yorgunluk
+- Grip hastalığının belirtileri: Ateş, öksürük, boğaz ağrısı, vücut ağrıları, baş ağrısı, yorgunluk
 
-- Korona hastalığının belirtileri:
-  - Ateş
-  - Öksürük
-  - Nefes darlığı
-  - Yorgunluk
-  - Baş ağrısı
+- Korona hastalığının belirtileri: Ateş, Öksürük, Nefes darlığı, Yorgunluk, Baş ağrısı
 
-- Domuz Gribi hastalığının belirtileri:
-  - Ateş
-  - Öksürük
-  - Boğaz ağrısı
-  - Vücut ağrıları
-  - Baş ağrısı
+- Domuz Gribi hastalığının belirtileri: Ateş, öksürük, boğaz ağrısı, vücut ağrıları, baş ağrısı
 
-- Sinüzit hastalığının belirtileri:
-  - Fasiyel ağrı
-  - Tıkalı burun veya burun akıntısı
-  - Öksürük
-  - Baş ağrısı
+- Sinüzit hastalığının belirtileri: Fasiyel ağrı,Tıkalı burun veya burun akıntısı,Öksürük,Baş ağrısı
 
-- Soğuk Algınlığı hastalığının belirtileri:
-  - Burun akıntısı
-  - Tıkanıklık
-  - Boğaz ağrısı
-  - Öksürük
-  - Hapşırma
-  - Baş ağrısı
+- Soğuk Algınlığı hastalığının belirtileri: Burun akıntısı, tıkanıklık, boğaz ağrısı, öksürük, hapşırma, baş ağrısı
 
+## Olasılıklar
+--- 
 Daha sonra bu hastalıkların yaygınlığı ile ilgili bir olasılık tanımlaması yapılmıştır. Bu olasılıklar şu şekildedir:
 - Grip: 0.5
 - Soğuk algınlığı: 0.4
