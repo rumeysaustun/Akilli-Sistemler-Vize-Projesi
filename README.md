@@ -1,1 +1,2 @@
-# Akilli-Sistemler-Vize-Projesi
+# Akıllı Sistemler Vize Projesi
+---
