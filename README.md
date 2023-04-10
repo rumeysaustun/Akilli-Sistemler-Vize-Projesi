@@ -1,11 +1,10 @@
 # Akıllı Sistemler Vize Projesi
----
+
 Bu projede Akıllı Sistemler dersi kapsamında bir hastalık tahmin sistemi geliştirilmiştir. Bu sistemde belirtileri girdi alan uygulamamız en yüksek ihtimalle kullanıcının hangi hastalığının olduğunu tahmin etmektedir. 
 
 
 
 ## Hastalıklar 
----
 
 - Grip
 - Soğuk Algınlığı
@@ -14,7 +13,7 @@ Bu projede Akıllı Sistemler dersi kapsamında bir hastalık tahmin sistemi gel
 - Domuz Gribi
 
 ## Belirtiler
---- 
+
 Öncelikle belirlenen bu hastalıkların belirtileri sıralanmış ve prolog kodunda tanımlanmıştır.
 
 - Grip hastalığının belirtileri: Ateş, öksürük, boğaz ağrısı, vücut ağrıları, baş ağrısı, yorgunluk
@@ -28,7 +27,7 @@ Bu projede Akıllı Sistemler dersi kapsamında bir hastalık tahmin sistemi gel
 - Soğuk Algınlığı hastalığının belirtileri: Burun akıntısı, tıkanıklık, boğaz ağrısı, öksürük, hapşırma, baş ağrısı
 
 ## Olasılıklar
---- 
+
 Daha sonra bu hastalıkların yaygınlığı ile ilgili bir olasılık tanımlaması yapılmıştır. Bu olasılıklar şu şekildedir:
 - Grip: 0.5
 - Soğuk algınlığı: 0.4
