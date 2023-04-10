@@ -4,7 +4,7 @@ Bu projede Akıllı Sistemler dersi kapsamında bir hastalık tahmin sistemi gel
 
 Ödev dört kısımdan oluşmaktadır.     
 
-➤ [1. Ödev](./Proje) *Yapım aşamasında*    
+➤ [1. Ödev](./Proje/1.-Ödev) *Yapım aşamasında*    
 ➤ [2. Ödev](./Proje) *Başlanmadı*    
 ➤ [3. Ödev](./Proje) *Başlanmadı*    
 ➤ [4. Ödev](./Proje) *Başlanmadı*     
