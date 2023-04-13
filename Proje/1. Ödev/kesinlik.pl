@@ -1,26 +1,29 @@
-% Belirtiler
-belirti(sinuzit, [yuz_agrisi, burun_akintisi, burun_tikanikligi, bas_agrisi, oksuruk]).
-belirti(korona, [ates, oksuruk, nefes_darligi, yorgunluk, halsizlik,bas_agrisi,bogaz_agrisi,ishal]).
-belirti(soguk_alginligi, [oksuruk,burun_akintisi, burun_tikanikligi,bas_agrisi,bogaz_agrisi, hapsirma]).
-belirti(domuz_gribi, [ates, oksuruk, kas_agrisi, burun_akintisi, kusma,bas_agrisi,bogaz_agrisi, vucut_agrilari]).
-belirti(grip, [ates, oksuruk, kas_agrisi, burun_akintisi, kusma,bas_agrisi, bogaz_agrisi, vucut_agrilari, yorgunluk]).
+% korona, domuz_gribi, sinuzit, soguk_alginligi, grip
 
-% İki liste arasındaki kesişimi bulma
-kesisim([], _, []).
-kesisim([X|Xs], Ys, [X|Zs]) :-
-    member(X, Ys),
-    !,
-    kesisim(Xs, Ys, Zs).
-kesisim([_|Xs], Ys, Zs) :-
-    kesisim(Xs, Ys, Zs).
+belirti(korona, [ates,oksuruk,nefes_darligi,halsizlik,bas_agrisi]).
+belirti(domuz_gribi, [ates,oksuruk,bogaz_agrisi,vucut_agrisi,bas_agrisi]).
+belirti(sinuzit, [fasiyel_agri,burun_akintisi,bas_agrisi,oksuruk,goz_agrisi]).
+belirti(soguk_alginligi, [burun_akintisi,tikaniklik,bogaz_agrisi,oksuruk,hapsirik,bas_agrisi]).
+belirti(grip, [oksuruk,bogaz_agrisi,burun_akintisi,bas_agrisi,halsizlik]).
 
-% Kesinlik faktörleri
-kesinlik(Hasta, Belirtiler, KesinlikFaktoru) :-
-    belirti(Hasta, HastaBelirtiler),
-    kesisim(HastaBelirtiler, Belirtiler, OrtakBelirtiler),
-    length(OrtakBelirtiler, N),
-    length(Belirtiler, M),
-    KesinlikFaktoru is N / M.
+% Hastalıkların kesinlik faktörleri atnımlandı
+kesinlik(korona, 0.9).
+kesinlik(domuz_gribi, 0.8).
+kesinlik(sinuzit, 0.7).
+kesinlik(soguk_alginligi, 0.6).
+kesinlik(grip, 0.75).
 
-% Sorular
-%?-kesinlik(Hasta, [ates, oksuruk, kas_agrisi, burun_akintisi], KesinlikFaktoru).
+% Belirtilerin hastalık olasılıklarını hesaplar
+hastalik_olasiligi(Belirtiler, Hastalik, Olasilik) :-
+    belirti(Hastalik, HastalikBelirtiler),
+    intersection(Belirtiler, HastalikBelirtiler, OrtakBelirtiler),
+    kesinlik(Hastalik, Kesinlik),
+    length(OrtakBelirtiler, OrtakBelirtiSayisi),
+    length(Belirtiler, ToplamBelirtiSayisi),
+    Olasilik is Kesinlik * (OrtakBelirtiSayisi / ToplamBelirtiSayisi).
+
+% Örnek kullanım
+% Belirtileri girdi olarak alın
+% Belirtiler = [ateş, öksürük, burun_akıntısı],
+% Hastalık olasılıklarını hesaplayın
+% calculate_hastalik_olasiligi(Belirtiler, Hastalik, Olasilik).

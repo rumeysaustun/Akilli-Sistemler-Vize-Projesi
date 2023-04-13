@@ -1,32 +1,34 @@
-% Define the symptoms for each disease
-symptom(korona, fever).
-symptom(korona, cough).
-symptom(korona, shortness_of_breath).
-symptom(korona, fatigue).
-symptom(korona, headache).
+% korona, domuz_gribi, sinuzit, soguk_alginligi, grip
+belirti(korona, [ates,oksuruk,nefes_darligi,halsizlik,bas_agrisi]).
+belirti(domuz_gribi, [ates,oksuruk,bogaz_agrisi,vucut_agrisi,bas_agrisi]).
+belirti(sinuzit, [fasiyel_agri,burun_akintisi,bas_agrisi,oksuruk,goz_agrisi]).
+belirti(soguk_alginligi, [burun_akintisi,tikaniklik,bogaz_agrisi,oksuruk,hapsirik,bas_agrisi]).
+belirti(grip, [oksuruk,bogaz_agrisi,burun_akintisi,bas_agrisi,halsizlik]).
 
-symptom(domuz_gribi, fever).
-symptom(domuz_gribi, cough).
-symptom(domuz_gribi, sore_throat).
-symptom(domuz_gribi, body_aches).
-symptom(domuz_gribi, headache).
 
-symptom(sinuzit, facial_pain_or_pressure).
-symptom(sinuzit, stuffy_or_runny_nose).
-symptom(sinuzit, headache).
-symptom(sinuzit, cough).
+% Hastalıkların önsel olasılıkları verildi. P(H) H: Hastalık
+onsel_olasilik(korona, 0.05).
+onsel_olasilik(domuz_gribi, 0.05).
+onsel_olasilik(sinuzit, 0.1).
+onsel_olasilik(soguk_alginligi, 0.3).
+onsel_olasilik(grip, 0.5).
 
-symptom(soguk_alginligi, runny_nose).
-symptom(soguk_alginligi, congestion).
-symptom(soguk_alginligi, sore_throat).
-symptom(soguk_alginligi, cough).
-symptom(soguk_alginligi, sneezing).
-symptom(soguk_alginligi, headache).
 
-symptom(grip, fever).
-symptom(grip, cough).
-symptom(grip, sore_throat).
-symptom(grip, runny_nose).
-symptom(grip, body_aches).
-symptom(grip, headache).
-symptom(grip, fatigue).
+% Sonsal olasılık hesaplanır. P(B|H) B: Belirti
+sonsal_olasilik(Hastalik,Girdi_belirti, Sonsal_olasilik) :- 
+    belirti(Hastalik, Belirtiler),
+    intersection(Girdi_belirti,Belirtiler,Ortak),
+    length(Ortak,OrtakLen),
+    length(Belirtiler,SymptomsLen),
+    Sonsal_olasilik = (OrtakLen / SymptomsLen).
+    
+    
+% Sonucu döndürür. P(H|B)    
+olasilik(Hastalik,Girdi_belirti, Prob) :-
+    onsel_olasilik(Hastalik, Prior),
+    sonsal_olasilik(Hastalik,Girdi_belirti,Sonsal_olasilik),
+    Prob is (Sonsal_olasilik * Prior) / ((Sonsal_olasilik * Prior) + ((1 - Sonsal_olasilik) * (1 - Prior))).
+
+    
+% Query the posterior probability of each disease given the symptoms
+%?- sonsal_olasilik(korona, Prob), belirti(korona, fever), belirti(korona, cough), belirti(korona, shortness_of_breath).
