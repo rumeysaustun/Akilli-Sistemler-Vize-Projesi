@@ -29,6 +29,4 @@ olasilik(Hastalik,Girdi_belirti, Prob) :-
     sonsal_olasilik(Hastalik,Girdi_belirti,Sonsal_olasilik),
     Prob is (Sonsal_olasilik * Prior) / ((Sonsal_olasilik * Prior) + ((1 - Sonsal_olasilik) * (1 - Prior))).
 
-    
-% Query the posterior probability of each disease given the symptoms
-%?- sonsal_olasilik(korona, Prob), belirti(korona, fever), belirti(korona, cough), belirti(korona, shortness_of_breath).
+%?- olasilik(H,[ates,fasiyel_agri,bas_agrisi], O).

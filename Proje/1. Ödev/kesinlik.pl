@@ -14,7 +14,7 @@ kesinlik(soguk_alginligi, 0.6).
 kesinlik(grip, 0.75).
 
 % Belirtilerin hastalık olasılıklarını hesaplar
-hastalik_olasiligi(Belirtiler, Hastalik, Olasilik) :-
+hastalik_olasiligi(Hastalik, Belirtiler,  Olasilik) :-
     belirti(Hastalik, HastalikBelirtiler),
     intersection(Belirtiler, HastalikBelirtiler, OrtakBelirtiler),
     kesinlik(Hastalik, Kesinlik),
@@ -22,8 +22,5 @@ hastalik_olasiligi(Belirtiler, Hastalik, Olasilik) :-
     length(Belirtiler, ToplamBelirtiSayisi),
     Olasilik is Kesinlik * (OrtakBelirtiSayisi / ToplamBelirtiSayisi).
 
-% Örnek kullanım
-% Belirtileri girdi olarak alın
-% Belirtiler = [ateş, öksürük, burun_akıntısı],
-% Hastalık olasılıklarını hesaplayın
-% calculate_hastalik_olasiligi(Belirtiler, Hastalik, Olasilik).
+
+% hastalik_olasiligi(H,[ates,fasiyel_agri,bas_agrisi], O).
