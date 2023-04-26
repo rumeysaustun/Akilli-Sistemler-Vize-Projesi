@@ -1,6 +1,7 @@
 import numpy as np
 import skfuzzy as fuzz
 from skfuzzy import control as ctrl
+import matplotlib.pyplot as plt
 
 # Girdilerin tanımlanması
 sicaklik = ctrl.Antecedent(np.arange(0, 101, 1), 'sicaklik')
@@ -50,3 +51,10 @@ pencere_acikligi_simulasyonu.compute()
 
 #Çıktının değerinin alınması
 print(pencere_acikligi_simulasyonu.output['pencere_acikligi'])
+
+#Grafikte gösterimi
+sicaklik.view()
+nem.view()
+pencere_acikligi.view(sim=pencere_acikligi_simulasyonu)
+
+plt.show()
