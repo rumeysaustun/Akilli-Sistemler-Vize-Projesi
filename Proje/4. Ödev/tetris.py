@@ -43,18 +43,16 @@ class Turler(object):
     def ilkTurler(self, gen, count):
         with open("veriler.csv", encoding='utf-8') as f_normal:
             datas = []
-            for line in f_normal:
-                datas.append(line.strip().split(','))
+            lines = f_normal.readlines()
+            for i in range(1,len(lines)):
+                datas.append(lines[i].strip().split(','))
             self.idt = int(datas[gen*40+count][0])
             self.a_boslukSay = float(datas[gen*40+count][1])
             self.a_maksYuk = float(datas[gen*40+count][2])
             self.a_minYuk = float(datas[gen*40+count][3])
             self.a_engebe = float(datas[gen*40+count][4])
             self.a_bosSatir = float(datas[gen*40+count][5])
-            if(gen*40+count<1000):
-                self.skor = datas[gen*40+count][6]
-            else:
-                self.skor = 0  
+            self.skor = datas[gen*40+count][6]
 
     def caprazlama(self, ata1, ata2):
         self.a_bosSatir = choice([ata1.a_bosSatir, ata2.a_bosSatir])
@@ -368,6 +366,7 @@ class Ekran(object):
 
     def tusKontrol(self):
         for eve in get():
+            if eve.type == QUIT:self.durdur = True
             if eve.type == KEYDOWN:
                 if eve.key == K_ESCAPE:post(Event(QUIT))
                 if eve.key == K_b:self.bilgiModu = 0
