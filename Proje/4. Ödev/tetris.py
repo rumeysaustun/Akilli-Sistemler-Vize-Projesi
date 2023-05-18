@@ -368,9 +368,6 @@ class Ekran(object):
 
     def tusKontrol(self):
         for eve in get():
-            print(eve.type)
-            print()
-            if eve.type == QUIT:self.durdur = True
             if eve.type == KEYDOWN:
                 if eve.key == K_ESCAPE:post(Event(QUIT))
                 if eve.key == K_b:self.bilgiModu = 0
