@@ -8,21 +8,20 @@ from numpy import sort, array, zeros, uint8, amax, amin, random, rot90, copy
 from time import time
 from random import choice
 
-class Zaman():
+with open("veriler.csv", encoding='utf-8') as f_normal:
+    all_lines = f_normal.readlines()
+    datas = [all_lines[i].strip().split(',') for i in range(1, len(all_lines))]
 
+class Zaman():
     def __init__(self):self.sonZaman, self.hzm, self.hzmd = time() , 3, [0.5, 0.75, 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000]
 
-    def zamanDurumu(self):
-        if time() > self.sonZaman + (1 / self.hzmd[self.hzm]):
-            self.sonZaman = time()
-            return True
-        return False
-
 class Skor():
-    # def __init__(self):self.skor, self.enYuksek = 0, 0
     def __init__(self):self.skor, self.enYuksek = 0, 37560
 
-class Cins():
+class Karo():
+    def __init__(self, duzen, idt):self.duzen, self.idt = array(duzen, dtype=uint8), idt
+
+class Tur():
 
     def __init__(self, nesil):
         self.idt = random.randint(1, 10000)
@@ -30,26 +29,6 @@ class Cins():
         self.nesil = nesil
 
     def __str__(self):return f'Skor: {self.skor}\nId :{self.idt}' + '\nBoş Satır  : %0.10f' % self.a_bosSatir + '\nMaks Yükseklik : %0.10f' % self.a_maksYuk + '\nToplam Yükseklik : %0.10f' % self.a_minYuk + '\nBoşluk Sayısı : %0.10f' % self.a_boslukSay + '\nEngebe : %0.10f' % self.a_engebe
-
-    # def ilkTurler(self):
-    #     self.a_bosSatir = random.random() - 0.05
-    #     self.a_maksYuk = random.random() - 0.05
-    #     self.a_minYuk = random.random() - 0.05
-    #     self.a_boslukSay = random.random() - 0.05
-    #     self.a_engebe = random.random() - 0.05
-
-    def ilkTurler(self, gen, count):
-        with open("veriler.csv", encoding='utf-8') as f_normal:
-            l = f_normal.readlines()
-            datas = [l[i].strip().split(',') for i in range(1, len(l))]
-            self.idt = int(datas[gen*40+count][0])
-            self.a_boslukSay = float(datas[gen*40+count][1])
-            self.a_maksYuk = float(datas[gen*40+count][2])
-            self.a_minYuk = float(datas[gen*40+count][3])
-            self.a_engebe = float(datas[gen*40+count][4])
-            self.a_bosSatir = float(datas[gen*40+count][5])
-            self.skor = datas[gen*40+count][6]
-            datas.clear()
 
     def caprazlama(self, ata1, ata2):
         self.a_bosSatir = choice([ata1.a_bosSatir, ata2.a_bosSatir])
@@ -64,46 +43,44 @@ class Nesil():
 
     def __init__(self, nesil):
         self.nesil, self.turler, self.elit = nesil, [], []
-        for _ in range(40):self.turler.append(Cins(self.nesil))
-
-    def ilkTurler(self, gen):
-        for i in range(40):self.turler[i].ilkTurler(gen,i)
-
-class Karo():
-
-    def __init__(self, duzen, idt):
-        self.duzen = array(duzen, dtype=uint8)
-        self.idt = idt
 
 class Populasyon():
 
     def __init__(self):
-        # self.nesiller = [Nesil(0)]
-        # for turler in self.nesiller[0].turler:turler.ilkTurler()
         self.nesiller = []
-        for q in range(26):
-            self.nesiller.append(Nesil(q))
-            self.nesiller[q].ilkTurler(q)
+        for i in range(26):
+            self.nesiller.append(Nesil(i))
+            for j in range(40):
+                tur = Tur(self.nesiller[i].nesil)
+                tur.idt = int(datas[i * 40 + j][0])
+                tur.a_boslukSay = float(datas[i * 40 + j][1])
+                tur.a_maksYuk = float(datas[i * 40 + j][2])
+                tur.a_minYuk = float(datas[i * 40 + j][3])
+                tur.a_engebe = float(datas[i * 40 + j][4])
+                tur.a_bosSatir = float(datas[i * 40 + j][5])
+                tur.skor = int(datas[i * 40 + j][6])
+                self.nesiller[i].turler.append(tur)
 
     def sonrakiNesil(self):
-        gn = len(self.nesiller)-1#Geçerli Nesil
-        sn = gn + 1#Sonraki Nesil
-        skorlar = sort(array([(i, self.nesiller[gn].turler[i].skor) for i in range(0,len(self.nesiller[gn].turler))], dtype=[('index', int), ('skor', int)]), order='skor')
+        gecerli_nesil = len(self.nesiller)-1
+        sonraki_nesil = len(self.nesiller)
+        skorlar = sort(array([(i, self.nesiller[gecerli_nesil].turler[i].skor) for i in range(0,len(self.nesiller[gecerli_nesil].turler))], dtype=[('index', int), ('skor', int)]), order='skor')
         elit = list(reversed([x[0] for x in skorlar[30:40]]))
-        self.nesiller[gn].elit = elit
-        self.nesiller.append(Nesil(sn))
+        self.nesiller[gecerli_nesil].elit = elit
+        self.nesiller.append(Nesil(sonraki_nesil))
         for i in range(40):
-            tur:Cins = self.nesiller[sn].turler[i]
-            if i < 5:tur.caprazlama(self.nesiller[gn].turler[elit[i]], self.nesiller[gn].turler[elit[i]])
-            else:
+            tur = Tur(sonraki_nesil)
+            if i<5:tur.caprazlama(self.nesiller[gecerli_nesil].turler[elit[i]], self.nesiller[gecerli_nesil].turler[elit[i]])#ilk 5 tane eliti kendileri ile çaprazlama
+            else:#10 tane eliti içinden random seçerek bunlardan 2 tanesini çaprazlama
                 ata1 = random.randint(10)
                 ata2 = random.randint(10)
-                tur.caprazlama(self.nesiller[gn].turler[elit[ata1]], self.nesiller[gn].turler[elit[ata2]])
+                tur.caprazlama(self.nesiller[gecerli_nesil].turler[elit[ata1]], self.nesiller[gecerli_nesil].turler[elit[ata2]])
             if random.random() < 0.05:tur.a_bosSatir = tur.a_bosSatir + 0.02 * (2 * random.random() - 1)
             if random.random() < 0.05:tur.a_maksYuk = tur.a_maksYuk + 0.02 * (2 * random.random() - 1)
             if random.random() < 0.05:tur.a_minYuk = tur.a_minYuk + 0.02 * (2 * random.random() - 1)
             if random.random() < 0.05:tur.a_boslukSay = tur.a_boslukSay + 0.02 * (2 * random.random() - 1)
             if random.random() < 0.05:tur.a_engebe = tur.a_engebe + 0.02 * (2 * random.random() - 1)
+            self.nesiller[sonraki_nesil].turler.append(tur)
 
 class Izgara():
 
@@ -218,7 +195,6 @@ class Zeka():
         self.izgara = izgara
         self.skor = skor
         self.populasyon = Populasyon()
-        # self.gecerliNesil = 0
         self.gecerliNesil = 25
         self.gecerliTurler = 0
         self.yedekIzgara = zeros([10, 20], dtype=uint8)
@@ -266,7 +242,7 @@ class Zeka():
 
     def hamleOranla(self):
         oyunsonu = False
-        gTurler: Cins = self.populasyon.nesiller[self.gecerliNesil].turler[self.gecerliTurler]
+        gTurler: Tur = self.populasyon.nesiller[self.gecerliNesil].turler[self.gecerliTurler]
         oran = self.izgara.g_bosSatir * gTurler.a_bosSatir + self.izgara.g_maksYuk * gTurler.a_maksYuk + self.izgara.g_minYuk * gTurler.a_minYuk + self.izgara.g_boslukSay * gTurler.a_boslukSay + self.izgara.g_engebe * gTurler.a_engebe
         if self.izgara.oyunSonuKont():
             oran -= 500
@@ -292,9 +268,9 @@ class Karolar():
 
 class Ekran():
 
-    def __init__(self, izgara:Izgara, zaman:Zaman, skor:Skor, ai:Zeka):
+    def __init__(self, izgara:Izgara, zaman:Zaman, skor:Skor, zeka:Zeka):
         self.renkler = [(24,24,24), (0, 255, 255), (0, 128, 255), (0, 255, 128), (255, 0, 255), (255, 255, 0), (128, 0, 255), (255, 0, 128)]
-        self.izgara, self.zaman, self.skor, self.yz  = izgara, zaman, skor, ai
+        self.izgara, self.zaman, self.skor, self.yz  = izgara, zaman, skor, zeka
         self.durdur = False
         self.bilgiModu = 0
         self.pencere = [0, -1]
@@ -312,19 +288,19 @@ class Ekran():
         statik.set_colorkey((0, 0, 0))
         statik.fill(self.renkler[0])
         for i in range(11):
-            line(statik, (100, 100, 100), (30 * i + 60, 60), (30 * i + 60, 660))
-            line(statik, (100, 100, 100), (60, 30 * i + 60), (360, 30 * i + 60), 1 + 2 * (i == 4))
-            line(statik, (100, 100, 100), (60, 30 * i + 390), (360, 30 * i + 390))
+            line(statik, (150, 150, 150), (30 * i + 60, 60), (30 * i + 60, 660))
+            line(statik, (150, 150, 150), (60, 30 * i + 60), (360, 30 * i + 60), 1 + 2 * (i == 4))
+            line(statik, (150, 150, 150), (60, 30 * i + 390), (360, 30 * i + 390))
         line(statik, (24, 24, 24), (60, 690), (360, 690))
         for i in range(5):
-            line(statik, (100, 100, 100), (480, 30 * i + 180), (600, 30 * i + 180))
-            line(statik, (100, 100, 100), (30 * i + 480, 180), (30 * i + 480, 300))
+            line(statik, (150, 150, 150), (480, 30 * i + 180), (600, 30 * i + 180))
+            line(statik, (150, 150, 150), (30 * i + 480, 180), (30 * i + 480, 300))
         statik.blit(self.buyukF.render("Tetris", 2, self.renkler[1]), (615 - self.buyukF.size("Tetris")[0] / 2, 30))
         self.statik = statik
 
     def karoAyarlama(self, gKaro:HareketliKaro, sKaro:HareketliKaro):self.gKaro, self.sKaro = gKaro, sKaro
 
-    def tusKontrol(self):
+    def guncelle(self):
         for eve in get():
             if eve.type == QUIT:self.durdur = True
             if eve.type == KEYDOWN:
@@ -339,9 +315,6 @@ class Ekran():
                     if eve.key == K_DOWN:self.pencere[1] = max(-1,self.pencere[1]-1)
                     if eve.key == K_RIGHT:self.pencere[0] = min(len(self.yz.populasyon.nesiller)-1, self.pencere[0]+1)
                     if eve.key == K_LEFT:self.pencere[0] = max(0, self.pencere[0]-1)
-
-    def guncelle(self):
-        self.tusKontrol()
         self.statikGuncelle()
         #Izgarayı Güncelleme
         izgara = self.izgara.izgara + self.gKaro.tarama()
@@ -387,7 +360,8 @@ class Main():
 
     def startGame(self):
         while not self.ekran.durdur:
-            if self.zaman.zamanDurumu():
+            if time() > self.zaman.sonZaman + (1 / self.zaman.hzmd[self.zaman.hzm]):
+                self.zaman.sonZaman = time()
                 self.yZ.hamleYap(self.gKaro)
                 if not self.gKaro.ArtY():
                     self.gKaro.uygula()
